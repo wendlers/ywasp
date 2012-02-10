@@ -3,8 +3,8 @@ YWasp
 sw@kaltpost.de
 http://gpio.kaltpost.de/
 
-Nordic nRF24l01+ Serial-2-Air based gateway
-===========================================
+Nordic nRF24l01+ Serial-2-Air Gateway
+=====================================
 
 
 Introduction
@@ -18,19 +18,19 @@ Communication is bidirectional, and from a users point of view, there is no diff
 
 A scenario with two YWasp devices connecting the serial ports of two PCs is shown below:
 
-              +--------+                            +--------+
-              |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
-< RX/TX UART> | SERVER |                            | CLIENT | < RX/TX UART> 
-              |   PTX  | <-- RX (data | NOP) TX --- |   PRX  |
-              +--------+                            +--------+
+               +--------+                            +--------+
+               |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
+< RX/TX UART > | SERVER |                            | CLIENT | < RX/TX UART > 
+               |   PTX  | <-- RX (data | NOP) TX --- |   PRX  |
+               +--------+                            +--------+
 
 Since YWasp is based on "libnrf24l01" from "libemb", one could easly embed a YWasp client based on "libnrf24l01" into an existing MCU project to allow remote access from a PC through a YWasp server instance. E.g. one could offer a remote shell to an robot: 
 
-              +--------+                            +--------+
-              |  YWasp | --- TX (data | NOP) RX --> |  ROBOT |
-< RX/TX UART> | SERVER |                            | YWasp  | 
-              |   PTX  | <-- RX (data | NOP) TX --- | CLIENT |
-              +--------+                            +--------+
+               +--------+                            +--------+
+               |  YWasp | --- TX (data | NOP) RX --> |  ROBOT |
+< RX/TX UART > | SERVER |                            | YWasp  | 
+               |   PTX  | <-- RX (data | NOP) TX --- | CLIENT |
+               +--------+                            +--------+
 
 YWasp is not intended (yet) for collecting data of e.g. multible sensors etc. It does no meshing or other fancy stuff. If you need this, you may consider using XBee or similar. 
 
