@@ -18,7 +18,7 @@
  */
 
 #ifndef _CLIENT_H_
-#define _client_H_
+#define _CLIENT_H_
 
 /**
  * Intialize the hardware to be used in client mode.
