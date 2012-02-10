@@ -16,7 +16,7 @@ YWasp currently only supports point-to-point connections. A client and a server 
 
 Communication is bidirectional, and from a users point of view, there is no difference between the client and the server. The fact, that one YWasp has to be configured as client, and the other one as server is due to the fact, that the Nordic modules operate either in PTX (primary TX) or PRX (primary RX) mode. To avoid switching each device continuously between PTX and PRX mode, the RF modules are configured into ESB (Enhanced Shock Burst) with ACK payload. Thus, the server continuously sends a package to the client (with data or a NOP package), and the client replays with a ACK pckage (with data or a NOP package).   
 
-A scenario with two YWasp devices connecting e.g. two serial ports of to PCs is shown below:
+A scenario with two YWasp devices connecting the serial ports of two PCs is shown below:
 
               +--------+                            +--------+
               |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
@@ -43,8 +43,9 @@ For detailed usage examples etc. visit the project homepage at http://gpio.kaltp
 Hardware
 -----------------
 
-For how to setup a YWasp hardware which could be used as server or as client, see the schematics under "doc/schematic". There you will find an example based on the STM32VL Discovery board. The IFLAT-32 board from ITead comes with a socket ready to plug in the nRF24l01. YWasp is compatible with IFLAT-32 and will work out of of the box with this board (you have to add the LEDs and jumpers for signaling and configuration).
+For how to setup a YWasp hardware which could be used as server or client, see the schematics under "doc/schematic". There you will find an example based on the STM32VL Discovery board. The IFLAT-32 board from ITead comes with a socket ready to plug in the nRF24l01. YWasp is compatible with IFLAT-32 and will work out of of the box with this board (you have to add the LEDs and jumpers for signaling and configuration).
  
+
 * BOM *
 
 For each YWasp instance the following parts are needed:
@@ -83,7 +84,7 @@ open        closed      select address 1
 closed      open        select address 2
 closed      closed      select address 3
 
-Note: the same address on the client and server has to be selected for a successfull PTP connection.
+Note: the same address on the client and server has to be selected for a successfull point-to-point connection.
 
 The sample schematic additionaly has a jumper VDD which, if closed, connects the 3.3V power supply form a USB to serial converter to the MCU.
 
@@ -100,17 +101,17 @@ D3          RX activity
 D4          Client mode			
 D5          Server mode
 
-Note: The jumpers and the signaling LEDs are optional. If you leav them out, the YWasp will configure itself in client mode with address 1.
+Note: The jumpers and the signaling LEDs are optional. If you leave them out, the YWasp will configure itself in client mode with address 0.
  
 
 * UART *
 
-YWasp uses a 3 line UART (RX, TX, GND) with an optional 4th line for 3.3v power supply. 
+YWasp uses a 3 line UART (RX, TX, GND) with an optional 4th line for 3.3v power supply (if jumper VDD is connected). 
 
 
 * Mini JTAG *
 
-The sample schematic also includes a mini JTAG interface which is compatible with the IFLAT-32 board (and the X-Link JTAG). If you use something elese then JTAG for flashing, you will not need the JTAG connector.
+The sample schematic also includes a mini JTAG interface which is compatible with the IFLAT-32 board (and the X-Link JTAG). If you use something else then JTAG for flashing, you will not need the JTAG connector.
 
 
 Supported Targets
@@ -152,7 +153,7 @@ make install
 
 If yout don't like that location specify a different one by setting "INSTDIR":
 
-INSTDIR=<your-location> make install
+INSTDIR=[your-location] make install
 
 
 Flashing
