@@ -26,11 +26,11 @@ A scenariou with two YWasp devices connecting e.g. two serial ports of to PCs is
 
 Since YWasp is based on "libnrf24l01" from "libemb", one could easly embed a YWasp client based on "libnrf24l01" into an existing MCU project to allow remote access from a PC through a YWasp server instance. E.g. one could offer a remote shell to an robot: 
 
-                   +--------+                            +--------+
-                   |  YWasp | --- TX (data | NOP) RX --> |  ROBOT |
-UART <-- RX/TX --> | SERVER |                            | YWasp  | 
-                   |   PTX  | <-- RX (data | NOP) TX --- | CLIENT |
-                   +--------+                            +--------+
+              +--------+                            +--------+
+              |  YWasp | --- TX (data | NOP) RX --> |  ROBOT |
+< RX/TX UART> | SERVER |                            | YWasp  | 
+              |   PTX  | <-- RX (data | NOP) TX --- | CLIENT |
+              +--------+                            +--------+
 
 YWasp is not intended (yet) for collecting data of e.g. multible sensors etc. It does no meshing or other fancy stuff. If you need this, you may consider using XBee or similar. 
 
@@ -51,14 +51,14 @@ For each YWasp instance the following parts are needed:
 
 Qty.    Part
 --------------------------------------
-1		STM32 (e.g. STM32VL Discovery)
-1		Nordic nRF24l01+
-5		LEDs (D1..5)
-5		Resistors (R1..R5)
-4		1x2 male headers (J1..3, VDD)
-4		Jumper bridges (J1..3, VDD)
-1		1x7 female headers (JTAG)
-1		1x4 male headers (UART)
+1       STM32 (e.g. STM32VL Discovery)
+1       Nordic nRF24l01+
+5       LEDs (D1..5)
+5       Resistors (R1..R5)
+4       1x2 male headers (J1..3, VDD)
+4       Jumper bridges (J1..3, VDD)
+1       1x7 female headers (JTAG)
+1       1x4 male headers (UART)
  
 
 * Configuration *
@@ -69,8 +69,8 @@ Selecting client or server mode:
 
 J1	            Function
 --------------------------------------------
-open			client mode	
-closed  		server mode	
+open            client mode	
+closed          server mode	
 
 Selecting the address: 
 
@@ -78,10 +78,10 @@ Each YWasp could be configured to use one of four predefined adresses through ju
 
 J2          J3          Function
 --------------------------------------------
-open		open		select address 0
-open		closed		select address 1
-closed		open		select address 2
-closed		closed		select address 3
+open        open        select address 0
+open        closed      select address 1
+closed      open        select address 2
+closed      closed      select address 3
 
 Note: the same address on the client and server has to be selected for a successfull PTP connection.
 
@@ -94,11 +94,11 @@ For status information, the YWasp drives 5 LEDs:
 
 LED         On indicates
 --------------------------------------------
-D1			Client connected (server only)
-D2			TX activity			
-D3			RX activity
-D4			Client mode			
-D5			Server mode
+D1          Client connected (server only)
+D2          TX activity			
+D3          RX activity
+D4          Client mode			
+D5          Server mode
 
 Note: The jumpers and the signaling LEDs are optional. If you leav them out, the YWasp will configure itself in client mode with address 1.
  
