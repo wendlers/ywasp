@@ -67,7 +67,7 @@ Configruation is done through three jumpers which are read in by the firmware on
 
 Selecting client or server mode:
 
-J1	            Function
+J1              Function
 --------------------------------------------
 open            client mode	
 closed          server mode	
