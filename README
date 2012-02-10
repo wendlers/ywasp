@@ -10,7 +10,7 @@ Nordic nRF24l01+ Serial-2-Air based gateway
 Introduction
 ------------
 
-YWasp is a firmware for "arifaying" a serial line over an Nordic nRF24l01+ module. To use YWasp, beside the RF module a MUC (currently the ARM-Cortex-M3 based STM32F100 and STM32F103 are supported) is needed. Depending on what you connect to the serial "side" of the YWasp, you may also need an USB to TTL serial converter (FTDI etc.). 
+YWasp is a firmware for "airifaying" a serial line over an Nordic nRF24l01+ module. To use YWasp, beside the RF module a MUC (currently the ARM-Cortex-M3 based STM32F100 and STM32F103 are supported) is needed. Depending on what you connect to the serial "side" of the YWasp, you may also need an USB to TTL serial converter (FTDI etc.). 
 
 YWasp currently only supports point-to-point connections. A client and a server YWasp instance could be coupled, and everythin that is written to the serial line of one YWasp is transmitted to the YWasp pear. On the pear, it will is written to the serial interface again. 
 
