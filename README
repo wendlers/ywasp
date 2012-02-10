@@ -18,11 +18,11 @@ Communication is bidirectional, and from a users point of view, there is no diff
 
 A scenariou with two YWasp devices connecting e.g. two serial ports of to PCs is shown below:
 
-                   +--------+                            +--------+
-                   |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
-UART <-- RX/TX --> | SERVER |                            | CLIENT | <-- RX/TX --> UART
-                   |   PTX  | <-- RX (data | NOP) TX --- |   PRX  |
-                   +--------+                            +--------+
+              +--------+                            +--------+
+              |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
+< RX/TX UART> | SERVER |                            | CLIENT | < RX/TX UART> 
+              |   PTX  | <-- RX (data | NOP) TX --- |   PRX  |
+              +--------+                            +--------+
 
 Since YWasp is based on "libnrf24l01" from "libemb", one could easly embed a YWasp client based on "libnrf24l01" into an existing MCU project to allow remote access from a PC through a YWasp server instance. E.g. one could offer a remote shell to an robot: 
 
@@ -49,7 +49,7 @@ For how to setup a YWasp hardware which could be used as server or as client, se
 
 For each YWasp instance the following parts are needed:
 
-Qty.	Part
+Qty.    Part
 --------------------------------------
 1		STM32 (e.g. STM32VL Discovery)
 1		Nordic nRF24l01+
@@ -67,7 +67,7 @@ Configruation is done through three jumpers which are read in by the firmware on
 
 Selecting client or server mode:
 
-J1				Function
+J1	            Function
 --------------------------------------------
 open			client mode	
 closed  		server mode	
@@ -76,7 +76,7 @@ Selecting the address:
 
 Each YWasp could be configured to use one of four predefined adresses through jumpers J2 and J3.
 
-J2			J3			Function
+J2          J3          Function
 --------------------------------------------
 open		open		select address 0
 open		closed		select address 1
@@ -92,7 +92,7 @@ The sample schematic additionaly has a jumper VDD which, if closed, connects the
 
 For status information, the YWasp drives 5 LEDs:
 
-LED			On indicates
+LED         On indicates
 --------------------------------------------
 D1			Client connected (server only)
 D2			TX activity			
