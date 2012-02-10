@@ -16,7 +16,7 @@ YWasp currently only supports point-to-point connections. A client and a server 
 
 Communication is bidirectional, and from a users point of view, there is no difference between the client and the server. The fact, that one YWasp has to be configured as client, and the other one as server is due to the fact, that the Nordic modules operate either in PTX (primary TX) or PRX (primary RX) mode. To avoid switching each device continuously between PTX and PRX mode, the RF modules are configured into ESB (Enhanced Shock Burst) with ACK payload. Thus, the server continuously sends a package to the client (with data or a NOP package), and the client replays with a ACK pckage (with data or a NOP package).   
 
-A scenariou with two YWasp devices connecting e.g. two serial ports of to PCs is shown below:
+A scenario with two YWasp devices connecting e.g. two serial ports of to PCs is shown below:
 
               +--------+                            +--------+
               |  YWasp | --- TX (data | NOP) RX --> |  YWasp |
