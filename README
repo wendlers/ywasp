@@ -10,7 +10,7 @@ Nordic nRF24l01+ Serial-2-Air Gateway
 Introduction
 ------------
 
-YWasp is a firmware for "airifaying" a serial line over an Nordic nRF24l01+ module. To use YWasp, beside the RF module a MUC (currently the ARM-Cortex-M3 based STM32F100 and STM32F103 are supported) is needed. Depending on what you connect to the serial "side" of the YWasp, you may also need an USB to TTL serial converter (FTDI etc.). 
+YWasp is a firmware for "airifaying" a serial line over an Nordic nRF24l01+ module. To use YWasp, beside the RF module a MUC (currently the ARM-Cortex-M3 based STM32F100 and STM32F103 and the MSP430G2553 are supported) is needed. Depending on what you connect to the serial "side" of the YWasp, you may also need an USB to TTL serial converter (FTDI etc.). 
 
 YWasp currently only supports point-to-point connections. A client and a server YWasp instance could be coupled, and everythin that is written to the serial line of one YWasp is transmitted to the YWasp pear. On the pear, it is written back on the serial interface again. 
 
@@ -43,10 +43,10 @@ For detailed usage examples etc. visit the project homepage at http://gpio.kaltp
 Hardware
 -----------------
 
-For how to setup a YWasp hardware which could be used as server or client, see the schematics under "doc/schematic". There you will find an example based on the STM32VL Discovery board. The IFLAT-32 board from ITead comes with a socket ready to plug in the nRF24l01. YWasp is compatible with IFLAT-32 and will work out of of the box with this board (you have to add the LEDs and jumpers for signaling and configuration).
+For how to setup a YWasp hardware which could be used as server or client, see the schematics under "doc/schematic". There you will find an example based on the STM32VL Discovery board and the TI Launchpad with an MSP430G2553. The IFLAT-32 board from ITead comes with a socket ready to plug in the nRF24l01. YWasp is compatible with IFLAT-32 and will work out of of the box with this board (you have to add the LEDs and jumpers for signaling and configuration).
  
 
-* BOM *
+* BOM STM32 *
 
 For each YWasp instance the following parts are needed:
 
@@ -60,6 +60,20 @@ Qty.    Part
 4       Jumper bridges (J1..3, VDD)
 1       1x7 female headers (JTAG)
 1       1x4 male headers (UART)
+1		(optional) Serial to USB converter
+
+* BOM TI Launchpad *
+
+For each YWasp instance the following parts are needed:
+
+Qty.    Part
+--------------------------------------
+1      	TI Launchpad + MSP430G2553 
+1       Nordic nRF24l01+
+5       LEDs (D1..3)
+5       Resistors (R1..R3)
+3       1x2 male headers (J1..3)
+3       Jumper bridges (J1..3)
  
 
 * Configuration *
@@ -89,7 +103,7 @@ Note: the same address on the client and server has to be selected for a success
 The sample schematic additionaly has a jumper VDD which, if closed, connects the 3.3V power supply form a USB to serial converter to the MCU.
 
 
-* Status LEDs *
+* Status LEDs STM32 *
 
 For status information, the YWasp drives 5 LEDs:
 
@@ -101,15 +115,29 @@ D3          RX activity
 D4          Client mode			
 D5          Server mode
 
+
+* Status LEDs MSP430 *
+
+For status information, the YWasp drives 5 LEDs:
+
+LED         On indicates
+--------------------------------------------
+D1          Client connected (server only)
+D2          RX/TXTX activity			
+D3          Server mode
+
 Note: The jumpers and the signaling LEDs are optional. If you leave them out, the YWasp will configure itself in client mode with address 0.
  
 
-* UART *
+* UART STM32 *
 
 YWasp uses a 3 line UART (RX, TX, GND) with an optional 4th line for 3.3v power supply (if jumper VDD is connected). 
 
+* UART MSP430 *
 
-* Mini JTAG *
+When using the Launchpad, the build in serial to USB converter could be used. The UART then could be accesd through inteface "/dev/ttyACM0" on Linux. Be aware of the fact, that you have to cross RX/TX lines on the Launchpads jumper bridge for the MSP430G2553!
+
+* Mini JTAGi STM32 *
 
 The sample schematic also includes a mini JTAG interface which is compatible with the IFLAT-32 board (and the X-Link JTAG). If you use something else then JTAG for flashing, you will not need the JTAG connector.
 
@@ -122,24 +150,35 @@ Currently the following ARM-Cortex-M3 targets are supported:
 * STM32F100 (tested on the STM32VL Discovery)
 * STM32F103 (tested on the IFLAT-32)
 
+And the following MSP430 targets are supported:
+
+* MSP430G2553 (tested on TI Launchpad)
+
 MCU/hardware specific stuff is clearly seperated from the rest, so porting to a different target (or base library) should not be a big deal.
 
 
 Compilation
 ------------
 
-"YWasp" depends on "libemb". The compilation steps described here assume, that you installed "libemb" allong with the "summon-arm-toolchain", located in its default location "~/sat". 
+"YWasp" depends on "libemb".  The compilation steps described here assume, that you installed "libemb" for your target platform.  
+
+For STM32, it is further assumed you installed the "summon-arm-toolchain", located in its default location "~/sat". 
+
+For MSP430, it is assumed you have installed a working msp430-gcc along with ths mspdebug tool (newer Ubuntu distributions provide packages for both).
 
 To compile YWasp, change to the toplevel directory "ywasp" and issue:
 
 for the STM32F100 as target:
 
-TARCH=STM32_100 make test
+TARCH=STM32_100 make
 
 or for the STM32F103 as target:
 
-TARCH=STM32_103 make test
+TARCH=STM32_103 make
 
+or for the MSP430 as target:
+
+TARCH=MSP430 make
 
 This will produce the firmware binary in various formats in the "bin" subdirectory.
 
@@ -147,13 +186,23 @@ This will produce the firmware binary in various formats in the "bin" subdirecto
 Installation
 ------------
 
-To instal the "ywasp.h" header (to use the constants in embedded clients) to the default location which is "$HOME/sat/arm-none-eabi/inlucde", type the following:
+To instal the "ywasp.h" header (to use the constants in embedded clients) to the default location which is "$HOME/sat/arm-none-eabi/inlucde" for STM32 and "$HOME/msp430/include" for the MSP430, type the following:
 
-make install
+for the STM32F100 as target:
+
+TARCH=STM32_100 make install
+
+for the STM32F103 as target:
+
+TARCH=STM32_103 make install
+
+for the MSP430 as target:
+
+TARCH=MSP430 make install
 
 If yout don't like that location specify a different one by setting "INSTDIR":
 
-INSTDIR=[your-location] make install
+INSTDIR=[your-location] TARCH=[your target] make install
 
 
 Flashing
@@ -163,6 +212,7 @@ This highly depends on the programmer you use. For an OpenOCD supported programm
 
 OOCD_IF=interface/flyswatter.cfg make flash-target
 
+For the MSP430 target on a Launchpad, the "mspdebug" tool is used for flashing. 
 
 Doxygen Docs
 ------------

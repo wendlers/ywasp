@@ -17,14 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "delay.h"
+#include <msp430.h>
+#include <legacymsp430.h>
+#include <libemb/serial/serial.h>
 
-void delay(unsigned long n)
+#include "ywasp.h"
+#include "client_server.h"
+
+void client_server_board_init(void)
 {
-     unsigned long i;
+    WDTCTL = WDTPW + WDTHOLD;
+    BCSCTL1 = CALBC1_1MHZ;
+    DCOCTL  = CALDCO_1MHZ;
+}
 
-     while(n--) {
-          i = 2;
-          while(i--) __asm__("nop");
+void client_server_serialirq_init(void)
+{
+    IE2 |= UCA0RXIE; 
+	__bis_SR_register(GIE);
+}
+
+void client_server_tx_stx(unsigned char *data, int size)
+{
+     int i;
+
+     for(i = 0; i < size; i++) {
+		serial_send_blocking(data[i]);
      }
+}
+
+interrupt(USCIAB0RX_VECTOR) USCI0RX_ISR(void)
+{
+	if (!serial_rb_full(&srx)) {
+        serial_rb_write(&srx, UCA0RXBUF);
+	}
 }

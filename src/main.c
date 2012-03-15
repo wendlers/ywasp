@@ -34,19 +34,21 @@
 static SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
 
 /**
+ * Ringbuffer for receiving from UART
+ */
+serial_rb srx;
+
+#ifndef MSP430
+/**
  * Memory used for transmision ringbuffer
  */
 static SERIAL_RB_Q stx_buf[YWASP_SERIAL_TX_BUF];
 
 /**
- * Ringbuffer for receiving from UART
- */
-serial_rb srx;
-
-/**
  * Ringbuffer for sending to UART
  */
 serial_rb stx;
+#endif
 
 /**
  * Are we running in server mode?
@@ -59,7 +61,9 @@ int is_server;
 void init()
 {
      serial_rb_init(&srx, &(srx_buf[0]), YWASP_SERIAL_RX_BUF);
+#ifndef MSP430
      serial_rb_init(&stx, &(stx_buf[0]), YWASP_SERIAL_TX_BUF);
+#endif
 
      client_server_board_init();
 

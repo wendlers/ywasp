@@ -25,15 +25,26 @@
  */
 #define YWASP_SERIAL_BR         9600
 
+#ifdef MSP430
+
 /**
  * Size of RX buffer for UART
  */
-#define YWASP_SERIAL_RX_BUF    	128
+#define YWASP_SERIAL_RX_BUF    	80	
+
+#else
+
+/**
+ * Size of RX buffer for UART
+ */
+#define YWASP_SERIAL_RX_BUF    	128	
 
 /**
  * Size of TX buffer for UART
  */
-#define YWASP_SERIAL_TX_BUF    	128
+#define YWASP_SERIAL_TX_BUF    	128	
+
+#endif
 
 /**
  * How to identify the NOP payload

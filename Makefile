@@ -14,7 +14,13 @@ VERSION		= 0.1
 TARGET		= ywasp_v$(VERSION)
 
 # where to install to by default
+# where to install to by default
+ifeq ($(TARCH),MSP430)
+INSTDIR		?= $(HOME)/msp430
+else
 INSTDIR		?= $(HOME)/sat/arm-none-eabi
+endif
+
 
 #OOCD_IF    ?= interface/openocd-usb.cfg 
 OOCD_IF    ?= interface/flyswatter.cfg
@@ -62,14 +68,19 @@ deploy-bin: clean target
 	
 deploy: deploy-src deploy-bin
 
+ifeq ($(TARCH),MSP430)
+flash-target: target
+	mspdebug rf2500 "prog $(BINDIR)/$(FIRMWARE)"
+else
 flash-target: target
 	openocd -f $(OOCD_IF) -f $(OOCD_BOARD) \
                 -c init -c targets -c "halt" \
                 -c "flash write_image erase $(BINDIR)/$(FIRMWARE)" \
                 -c "verify_image $(BINDIR)/$(FIRMWARE)" \
                 -c "reset run" -c shutdown
+endif
 
-install: gen-docs
+install: 
 	install -D -d -m 755 $(INSTDIR)/include
 	install -m 644 $(SRCDIR)/include/ywasp.h $(INSTDIR)/include/.
 

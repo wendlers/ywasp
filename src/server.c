@@ -28,19 +28,19 @@
 
 void server_init(int addr_id)
 {
-     static nrf_reg_buf addr0 = {
+     nrf_reg_buf addr0 = {
           .data = YWASP_NRF_ADDR0,
      };
 
-     static nrf_reg_buf addr1 = {
+     nrf_reg_buf addr1 = {
           .data = YWASP_NRF_ADDR1,
      };
 
-     static nrf_reg_buf addr2 = {
+     nrf_reg_buf addr2 = {
           .data = YWASP_NRF_ADDR2,
      };
 
-     static nrf_reg_buf addr3 = {
+     nrf_reg_buf addr3 = {
           .data = YWASP_NRF_ADDR3,
      };
 
@@ -60,7 +60,7 @@ void server_init(int addr_id)
 
      nrf_preset_esbpl(NRF_MODE_PTX, YWASP_RF_CHANNEL, YWASP_NRF_PL_SIZE + 1, YWASP_TX_RETRY, YWASP_TX_RETRY_DELAY, addr);
 
-     delay(100000);
+     delay(10000);
 }
 
 void server_loop(void)
