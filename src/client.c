@@ -65,8 +65,8 @@ void client_init(int addr_id)
 
 void client_loop(void)
 {
-     static nrf_payload   ptx;
-     static nrf_payload   prx;
+     nrf_payload   ptx;
+     nrf_payload   prx;
 
      unsigned char cnt = 0;
 

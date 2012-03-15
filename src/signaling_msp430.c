@@ -56,16 +56,26 @@ void signaling_init(void)
 	int i;
 
 	for(i = 0; i < 5; i++) {
-		P2DIR  |= signals[i];
-		P2OUT  |= signals[i];
+		P2DIR  |=  signals[i];
 	}
+
+	P2OUT = 0; 
 }
 
 void signaling_set(unsigned char sig, unsigned char state)
 {
-     if(state) {
-		P2OUT |= signals[sig];
-     } else {
+	if(sig == SIG_CLI) {
 		P2OUT &= ~signals[sig];
-     }
+	}
+/*	else if(sig == SIG_TX) {
+	
+	}
+*/
+	else {
+     	if(state) {
+			P2OUT |= signals[sig];
+     	} else {
+			P2OUT &= ~signals[sig];
+     	}
+	}
 }

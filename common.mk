@@ -21,7 +21,7 @@ ifeq ($(TARCH),MSP430)
 INCDIR		+= -I./include -I$(HOME)/msp430/include 
 LIBDIR		+= -L$(HOME)/msp430/lib
 CFLAGS		+= -Os -g -mmcu=msp430g2553 -Wall -Wextra $(INCDIR) 
-LDFLAGS     += -nostartfiles -mmcu=msp430g2553 $(LIBDIR) $(LIBS)
+LDFLAGS     += -mmcu=msp430g2553 $(LIBDIR) $(LIBS)
 else
 INCDIR		+= -I./include -I$(HOME)/sat/arm-none-eabi/include
 CFLAGS		+= -Os -g -Wall -Wextra -fno-common -mcpu=cortex-m3 -mthumb -msoft-float -MD $(INCDIR) -DSTM32F1
