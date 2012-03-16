@@ -26,6 +26,29 @@
 #include "ywasp.h"
 #include "client_server.h"
 
+/**
+ * Memory used for receiving ringbuffer
+ */
+SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
+
+/**
+ * Ringbuffer for receiving from UART
+ */
+serial_rb srx;
+
+/**
+ * Memory used for transmision ringbuffer
+ */
+SERIAL_RB_Q stx_buf[YWASP_SERIAL_TX_BUF];
+
+/**
+ * Ringbuffer for sending to UART
+ */
+serial_rb stx;
+
+nrf_payload ptx;
+nrf_payload prx;
+
 void client_server_board_init(void)
 {
 #ifdef STM32_100
@@ -37,6 +60,9 @@ void client_server_board_init(void)
 
 void client_server_serialirq_init(void)
 {
+     serial_rb_init(&srx, &(srx_buf[0]), YWASP_SERIAL_RX_BUF);
+     serial_rb_init(&stx, &(stx_buf[0]), YWASP_SERIAL_TX_BUF);
+
      /* Enable the USART1 interrupt. */
      nvic_enable_irq(NVIC_USART1_IRQ);
 
@@ -46,15 +72,18 @@ void client_server_serialirq_init(void)
 
 void client_server_tx_stx(unsigned char *data, int size)
 {
-     int i;
+	int i;
 
-     for(i = 0; i < size; i++) {
-          if(serial_rb_full(&stx)) {
-               break;
-          }
-          serial_rb_write(&stx, data[i]);
-          USART_CR1(USART1) |= USART_CR1_TXEIE;
-     }
+   	for(i = 0; i < size; i++) {
+   		if(serial_rb_full(&stx)) {
+        	break;
+        }
+        serial_rb_write(&stx, data[i]);
+    }
+
+	if(i > 0) {
+    	USART_CR1(USART1) |= USART_CR1_TXEIE;
+	}
 }
 
 void usart1_isr(void)

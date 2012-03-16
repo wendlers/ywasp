@@ -60,14 +60,11 @@ void server_init(int addr_id)
 
      nrf_preset_esbpl(NRF_MODE_PTX, YWASP_RF_CHANNEL, YWASP_NRF_PL_SIZE + 1, YWASP_TX_RETRY, YWASP_TX_RETRY_DELAY, addr);
 
-     delay(10000);
+     delay(1000);
 }
 
 void server_loop(void)
 {
-     static nrf_payload   ptx;
-     static nrf_payload   prx;
-
      unsigned char cnt = 0;
 
      int s;
@@ -86,7 +83,6 @@ void server_loop(void)
           ptx.data[0] = YWASP_NRF_PL_NOP;
 
           while(!serial_rb_empty(&srx) && ptx.data[0] < YWASP_NRF_PL_SIZE) {
-               // ptx.data[0] = PL_SET;
                ptx.data[ptx.data[0] + 1] = serial_rb_read(&srx);
                ptx.data[0]++;
           }

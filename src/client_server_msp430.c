@@ -24,6 +24,19 @@
 #include "ywasp.h"
 #include "client_server.h"
 
+/**
+ * Memory used for receiving ringbuffer
+ */
+SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
+
+/**
+ * Ringbuffer for receiving from UART
+ */
+serial_rb srx;
+
+nrf_payload ptx;
+nrf_payload prx;
+
 void client_server_board_init(void)
 {
     WDTCTL = WDTPW + WDTHOLD;
@@ -33,6 +46,8 @@ void client_server_board_init(void)
 
 void client_server_serialirq_init(void)
 {
+    serial_rb_init(&srx, &(srx_buf[0]), YWASP_SERIAL_RX_BUF);
+
     IE2 |= UCA0RXIE; 
 	__bis_SR_register(GIE);
 }

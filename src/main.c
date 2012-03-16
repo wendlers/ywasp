@@ -18,7 +18,6 @@
  */
 
 #include <libemb/serial/serial.h>
-#include <libemb/serial/serial_rb.h>
 #include <libemb/nrf24l01/nrf24l01.h>
 
 #include "ywasp.h"
@@ -27,28 +26,6 @@
 #include "client_server.h"
 #include "client.h"
 #include "server.h"
-
-/**
- * Memory used for receiving ringbuffer
- */
-static SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
-
-/**
- * Ringbuffer for receiving from UART
- */
-serial_rb srx;
-
-#ifndef MSP430
-/**
- * Memory used for transmision ringbuffer
- */
-static SERIAL_RB_Q stx_buf[YWASP_SERIAL_TX_BUF];
-
-/**
- * Ringbuffer for sending to UART
- */
-serial_rb stx;
-#endif
 
 /**
  * Are we running in server mode?
@@ -60,11 +37,6 @@ int is_server;
  */
 void init()
 {
-     serial_rb_init(&srx, &(srx_buf[0]), YWASP_SERIAL_RX_BUF);
-#ifndef MSP430
-     serial_rb_init(&stx, &(stx_buf[0]), YWASP_SERIAL_TX_BUF);
-#endif
-
      client_server_board_init();
 
      signaling_init();
@@ -86,7 +58,6 @@ void init()
           client_init(config_get_address_id());
           signaling_set(SIG_CLI, SIG_STATE_ON);
      }
-
 }
 
 int main(void)

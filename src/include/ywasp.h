@@ -30,7 +30,7 @@
 /**
  * Size of RX buffer for UART
  */
-#define YWASP_SERIAL_RX_BUF    	64	
+#define YWASP_SERIAL_RX_BUF    	64
 
 #else
 
@@ -97,6 +97,6 @@
  * client and the server device are fast enough to handle the traffic.
  * The value given here is the number of "NOPs" / 2 to execute while waiting.
  */
-#define YWASP_TX_THROTTLE		2000
+#define YWASP_TX_THROTTLE		0
 
 #endif

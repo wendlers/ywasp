@@ -60,14 +60,11 @@ void client_init(int addr_id)
 
      nrf_preset_esbpl(NRF_MODE_PRX, YWASP_RF_CHANNEL, YWASP_NRF_PL_SIZE + 1, YWASP_TX_RETRY, YWASP_TX_RETRY_DELAY, addr);
 
-     delay(10000);
+     delay(1000);
 }
 
 void client_loop(void)
 {
-     nrf_payload   ptx;
-     nrf_payload   prx;
-
      unsigned char cnt = 0;
 
      int s;

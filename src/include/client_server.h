@@ -21,10 +21,34 @@
 #define _CLIENT_SERVER_H_
 
 #include <libemb/serial/serial_rb.h>
+#include <libemb/nrf24l01/nrf24l01.h>
 
+/**
+ * Memory used for receiving ringbuffer
+ */
+extern SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
+
+/**
+ * Ringbuffer for receiving from UART
+ */
 extern serial_rb srx;
 
+extern nrf_payload ptx;
+
+#ifndef MSP430
+/**
+ * Memory used for transmision ringbuffer
+ */
+extern SERIAL_RB_Q stx_buf[YWASP_SERIAL_TX_BUF];
+
+/**
+ * Ringbuffer for sending to UART
+ */
 extern serial_rb stx;
+
+#endif
+
+extern nrf_payload prx;
 
 /**
  * Board initslizatin for both, client and server mode.
