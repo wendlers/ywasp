@@ -42,16 +42,10 @@ void config_init(void)
 	P2DIR &= ~CFG_JMP_ADDR1;
 	P2DIR &= ~CFG_JMP_ADDR2;
 	P2OUT  = 0;
-	// enable pullup on config pins
-	// P2REN |= CFG_JMP_CLISRV + CFG_JMP_ADDR1 + CFG_JMP_ADDR2; 
 }
 
 int config_is_server(void)
 {
-	int srv = ((P2IN & CFG_JMP_CLISRV) == 0);
-
-	if(srv) cio_print("server\n\r"); else cio_print("client\n\r");
-
   	return ((P2IN & CFG_JMP_CLISRV) == 0);
 }
 
@@ -65,6 +59,6 @@ int config_get_address_id(void)
      if((P2IN & CFG_JMP_ADDR2) == 0) {
           adr |= 2;
      }
-	cio_printf("address %u\n\r", adr);
+
      return adr;
 }
