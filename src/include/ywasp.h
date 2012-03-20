@@ -30,7 +30,12 @@
 /**
  * Size of RX buffer for UART
  */
-#define YWASP_SERIAL_RX_BUF    	128	
+#define YWASP_SERIAL_RX_BUF    	64	
+
+/**
+ * Size of TX buffer for UART
+ */
+#define YWASP_SERIAL_TX_BUF    	32	
 
 #else
 

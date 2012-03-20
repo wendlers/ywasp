@@ -34,6 +34,16 @@ SERIAL_RB_Q srx_buf[YWASP_SERIAL_RX_BUF];
  */
 serial_rb srx;
 
+/**
+ * Memory used for transmision ringbuffer
+ */
+SERIAL_RB_Q stx_buf[YWASP_SERIAL_TX_BUF];
+
+/**
+ * Ringbuffer for sending to UART
+ */
+serial_rb stx;
+
 nrf_payload ptx;
 nrf_payload prx;
 
@@ -47,6 +57,7 @@ void client_server_board_init(void)
 void client_server_serialirq_init(void)
 {
     serial_rb_init(&srx, &(srx_buf[0]), YWASP_SERIAL_RX_BUF);
+    serial_rb_init(&stx, &(stx_buf[0]), YWASP_SERIAL_TX_BUF);
 
     IE2 |= UCA0RXIE; 
 	__bis_SR_register(GIE);
@@ -54,11 +65,18 @@ void client_server_serialirq_init(void)
 
 void client_server_tx_stx(unsigned char *data, int size)
 {
-     int i;
+	int i;
 
-     for(i = 0; i < size; i++) {
-		serial_send_blocking(data[i]);
-     }
+   	for(i = 0; i < size; i++) {
+   		if(serial_rb_full(&stx)) {
+        	break;
+        }
+        serial_rb_write(&stx, data[i]);
+    }
+
+	if(i > 0) {
+		IE2 |= UCA0TXIE;
+	}
 }
 
 interrupt(USCIAB0RX_VECTOR) USCI0RX_ISR(void)
@@ -67,3 +85,15 @@ interrupt(USCIAB0RX_VECTOR) USCI0RX_ISR(void)
         serial_rb_write(&srx, UCA0RXBUF);
 	}
 }
+
+interrupt(USCIAB0TX_VECTOR) USCI0TX_ISR(void)
+{
+	if(!serial_rb_empty(&stx)) {
+    	serial_send(serial_rb_read(&stx));
+    }
+    else {
+    	/* Disable the TX interrupt, it's no longer needed. */
+		IE2 &= ~UCA0TXIE; 
+    }
+}
+
