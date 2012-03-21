@@ -97,8 +97,12 @@ void client_loop(void)
 
           if(s != 0 && prx.data[0] != YWASP_NRF_PL_NOP) {
                signaling_set(SIG_RX, SIG_STATE_ON);
+               signaling_set(SIG_CON, SIG_STATE_ON);
                client_server_tx_stx(&(prx.data[1]), prx.data[0]);
           }
+		  else {
+               signaling_set(SIG_RX, SIG_STATE_OFF);
+		  }
      }
 }
 
