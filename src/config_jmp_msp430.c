@@ -46,17 +46,17 @@ void config_init(void)
 
 int config_is_server(void)
 {
-  	return ((P2IN & CFG_JMP_CLISRV) == 0);
+  	return ((P2IN & CFG_JMP_CLISRV) != 0);
 }
 
 int config_get_address_id(void)
 {
      int adr = 0;
 
-     if((P2IN & CFG_JMP_ADDR1) == 0) {
+     if((P2IN & CFG_JMP_ADDR1) != 0) {
           adr = 1;
      }
-     if((P2IN & CFG_JMP_ADDR2) == 0) {
+     if((P2IN & CFG_JMP_ADDR2) != 0) {
           adr |= 2;
      }
 
