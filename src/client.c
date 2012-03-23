@@ -78,6 +78,7 @@ void client_loop(void)
           if(++cnt == 0xff) {
                signaling_set(SIG_TX, SIG_STATE_OFF);
                signaling_set(SIG_RX, SIG_STATE_OFF);
+               signaling_set(SIG_CON, SIG_STATE_OFF);
           }
 
           ptx.data[0] = YWASP_NRF_PL_NOP;
@@ -91,18 +92,19 @@ void client_loop(void)
                signaling_set(SIG_TX, SIG_STATE_ON);
           }
 
-          nrf_write_ack_pl(&ptx, 0);
+          if(nrf_write_ack_pl(&ptx, 0) == NRF_ERR_TX_FULL) {
+               signaling_set(SIG_CON, SIG_STATE_OFF);
+		  }
+	      else {
+               signaling_set(SIG_CON, SIG_STATE_ON);
+          }		     
 
           s = nrf_receive_blocking(&prx);
 
           if(s != 0 && prx.data[0] != YWASP_NRF_PL_NOP) {
-               signaling_set(SIG_RX, SIG_STATE_ON);
-               signaling_set(SIG_CON, SIG_STATE_ON);
+               signaling_set(SIG_RX,  SIG_STATE_ON);
                client_server_tx_stx(&(prx.data[1]), prx.data[0]);
           }
-		  else {
-               signaling_set(SIG_RX, SIG_STATE_OFF);
-		  }
      }
 }
 
