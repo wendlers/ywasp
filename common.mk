@@ -10,8 +10,8 @@ else
 PREFIX	?= arm-none-eabi-
 endif
 
-CC			 = $(PREFIX)gcc
-LD			 = $(PREFIX)gcc
+CC		 = $(PREFIX)gcc
+LD		 = $(PREFIX)gcc
 OBJCOPY		 = $(PREFIX)objcopy
 OBJDUMP		 = $(PREFIX)objdump
 
@@ -27,7 +27,7 @@ INCDIR		+= -I./include -I$(HOME)/sat/arm-none-eabi/include
 CFLAGS		+= -Os -g -Wall -Wextra -fno-common -mcpu=cortex-m3 -mthumb -msoft-float -MD $(INCDIR) -DSTM32F1
 LDSCRIPT	?= $(BINARY).ld
 LIBDIR		+= -L$(HOME)/sat/arm-none-eabi/lib
-LDFLAGS		+= $(LIBDIR) $(LIBS) -T$(LDSCRIPT) -nostartfiles -Wall,--gc-sections 
+LDFLAGS		+= $(LIBDIR) $(LIBS) -T$(LDSCRIPT) -nostartfiles -Wall
 LDFLAGS		+= -mthumb -march=armv7 -mfix-cortex-m3-ldrd -msoft-float
 LIBS		+= -lopencm3_stm32f1
 endif
